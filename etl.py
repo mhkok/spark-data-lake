@@ -1,3 +1,4 @@
+import pyspark
 import configparser
 from datetime import datetime
 import os
@@ -23,22 +24,22 @@ def create_spark_session():
 
 def process_song_data(spark, input_data, output_data):
     # get filepath to song data file
-    song_data = 
+    song_data = os.path.join(input_data, 'song_data/A/A/A/*.json')
     
     # read song data file
-    df = 
+    df = spark.read.json(song_data)
 
     # extract columns to create songs table
-    songs_table = 
-    
+    songs_table = df.select('song_id', 'title', 'artist_id', 'year', 'duration').distinct()
+
     # write songs table to parquet files partitioned by year and artist
-    songs_table
+    songs_table = songs_table.write.partitionBy("year", "artist_id").parquet(os.path.join(output_data, "songs_tbl.parquet"), "overwrite")
 
     # extract columns to create artists table
-    artists_table = 
+    artists_table = df.select("artist_id", "artist_name", "artist_location", "artist_longitude", "artist_latitude").distinct()
     
     # write artists table to parquet files
-    artists_table
+    artists_table = artists_table.write.parquet(os.path.join(output_data, "artists_tbl.parquet"), "overwrite")
 
 
 def process_log_data(spark, input_data, output_data):
@@ -54,7 +55,7 @@ def process_log_data(spark, input_data, output_data):
     # extract columns for users table    
     artists_table = 
     
-    # write users table to parquet files
+    # write users table to parquet filesm
     artists_table
 
     # create timestamp column from original timestamp column
@@ -84,7 +85,7 @@ def process_log_data(spark, input_data, output_data):
 def main():
     spark = create_spark_session()
     input_data = "s3a://udacity-dend/"
-    output_data = ""
+    output_data = "s3a://emr-output-data"
     
     process_song_data(spark, input_data, output_data)    
     process_log_data(spark, input_data, output_data)
