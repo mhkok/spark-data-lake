@@ -68,7 +68,7 @@ def process_log_data(spark, input_data, output_data):
     df = df.filter(df.page == "NextSong")
 
     # extract columns for users table    
-    users_table = df.select("user_id", "firstName", "lastName", "gender", "level").distinct()
+    users_table = df.select("userId", "firstName", "lastName", "gender", "level").distinct()
     
     # write users table to parquet files
     users_table = users_table.write.parquet(os.path.join(output_data, 'users_tbl.parquet'), "overwrite")
