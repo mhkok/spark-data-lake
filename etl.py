@@ -15,6 +15,9 @@ os.environ['AWS_SECRET_ACCESS_KEY']=config['AWS_SECRET_ACCESS_KEY']
 
 
 def create_spark_session():
+    """
+    This function creates as spark session to connect to spark
+    """
     spark = SparkSession \
         .builder \
         .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
@@ -23,6 +26,12 @@ def create_spark_session():
 
 
 def process_song_data(spark, input_data, output_data):
+    """
+    This function processes the song data. The following paramaters are used as input:
+    - spark: the sprak session created in the function 'create_spark_session'
+    - input_data: the song data location defined in the main function
+    - output_data: the location of the output data defined in the main function
+    """
     # get filepath to song data file
     song_data = os.path.join(input_data, 'song_data/A/A/A/*.json')
     
@@ -43,6 +52,12 @@ def process_song_data(spark, input_data, output_data):
 
 
 def process_log_data(spark, input_data, output_data):
+    """
+    This function processes the log data. The following paramaters are used as input:
+    - spark: the sprak session created in the function 'create_spark_session'
+    - input_data: the log data location defined in the main function
+    - output_data: the location of the output data defined in the main function
+    """
     # get filepath to log data file
     log_data = os.path.join(input_data, 'log_data/2018/*/*.json')
 
@@ -101,6 +116,10 @@ def process_log_data(spark, input_data, output_data):
 
 
 def main():
+    """
+    The main function that calls the different functions in the etl.py script. 
+    This functiion creates a spark session, processes the song data & finally processes the log data. 
+    """
     spark = create_spark_session()
     input_data = "s3a://udacity-dend/"
     output_data = "s3a://emr-output-data"
