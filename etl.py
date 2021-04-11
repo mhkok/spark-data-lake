@@ -112,7 +112,7 @@ def process_log_data(spark, input_data, output_data):
                     .withColumn("songplay_id", monotonically_increasing_id())
 
     # write songplays table to parquet files partitioned by year and month
-    songplays_table = songplays_table.write.partitionBy("year", "month").parquet(os.path.join(output_data, "sonplays_tbl.parquet"), "overwrite")
+    songplays_table = songplays_table.write.partitionBy("year", "month").parquet(os.path.join(output_data, "songplays_tbl.parquet"), "overwrite")
 
 
 def main():
